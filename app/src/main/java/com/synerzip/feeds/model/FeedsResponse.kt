@@ -2,7 +2,8 @@ package com.synerzip.feeds.model
 
 import com.google.gson.annotations.SerializedName
 
-data class FeedsResponse(val author : Author,
+data class FeedsResponse(val feed: Feed)
+data class Feed(val author : Author,
                          val entry: List<ImEntity>,
                          val updated : Common,
                          val rights : Common,
