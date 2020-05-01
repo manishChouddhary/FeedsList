@@ -8,6 +8,7 @@ import com.synerzip.feeds.dependencyinjection.FeedsModule
 class AppApplication:Application() {
     companion object{
         lateinit var diComponent: FeedsComponent
+        lateinit var application: Application
     }
 
     override fun onCreate() {
@@ -15,5 +16,6 @@ class AppApplication:Application() {
         diComponent = DaggerFeedsComponent.builder()
             .feedsModule(FeedsModule())
             .build()
+        application = this
     }
 }

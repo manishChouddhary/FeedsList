@@ -68,8 +68,14 @@ dependencies {
         exclude group: 'glide-parent'
     }
 
+    //room database
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
     //unit test
     testImplementation 'junit:junit:4.13'
+    testImplementation "androidx.room:room-testing:$room_version"
 
     //ui test
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

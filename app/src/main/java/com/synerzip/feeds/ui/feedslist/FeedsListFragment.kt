@@ -11,6 +11,7 @@ import com.synerzip.feeds.extentions.getDimen
 import com.synerzip.feeds.extentions.gone
 import com.synerzip.feeds.extentions.visible
 import com.synerzip.feeds.model.FeedsResponse
+import com.synerzip.feeds.model.ImEntity
 import kotlinx.android.synthetic.main.fragment_feeds_list.*
 
 class FeedsListFragment : BaseFragment() {
@@ -63,12 +64,9 @@ class FeedsListFragment : BaseFragment() {
     }
 
     private fun observeListState() {
-        viewModel.feedsLiveData.observe(viewLifecycleOwner, Observer<FeedsResponse> {
-            with(it.feed){
-                rvFeedsList?.visible()
-                rvAdapter.setList(entry)
-                setUpToolBar(author.name.label)
-            }
+        viewModel.feedEntityLiveData.observe(viewLifecycleOwner, Observer<List<ImEntity>> {
+            rvAdapter.setList(it)
+            rvFeedsList?.visible()
         })
     }
 
