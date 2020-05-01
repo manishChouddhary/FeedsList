@@ -54,7 +54,7 @@ class FeedsListFragment : BaseFragment() {
     }
 
     private fun observeLoadingState() {
-        viewModel.loadingStateLiveData.observe(requireActivity(), Observer{
+        viewModel.loadingStateLiveData.observe(viewLifecycleOwner, Observer{
             when(it){
                 true -> { pvLoading?.visible() }
                 false -> { pvLoading?.gone() }
@@ -63,9 +63,9 @@ class FeedsListFragment : BaseFragment() {
     }
 
     private fun observeListState() {
-        viewModel.feedsLiveData.observe(requireActivity(), Observer<FeedsResponse> {
+        viewModel.feedsLiveData.observe(viewLifecycleOwner, Observer<FeedsResponse> {
             with(it.feed){
-                rvFeedsList.visible()
+                rvFeedsList?.visible()
                 rvAdapter.setList(entry)
                 setUpToolBar(author.name.label)
             }
@@ -74,8 +74,8 @@ class FeedsListFragment : BaseFragment() {
 
     private fun observeErrorState() {
         viewModel.errorStateLiveData.observe(viewLifecycleOwner, Observer{
-            tvError.visible()
-            tvError.text = it.message
+            tvError?.visible()
+            tvError?.text = it.message
         })
     }
 }

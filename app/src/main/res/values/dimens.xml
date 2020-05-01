@@ -5,4 +5,5 @@
     <dimen name="item_top_spacing">9dp</dimen>
     <dimen name="item_bottom_spacing">24dp</dimen>
     <dimen name="text_top_margin">8dp</dimen>
+    <dimen name="margin_5">5dp</dimen>
 </resources>

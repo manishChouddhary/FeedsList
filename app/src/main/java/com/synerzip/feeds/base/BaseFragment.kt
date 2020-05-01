@@ -41,8 +41,8 @@ abstract class BaseFragment : Fragment() {
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
         = inflater.inflate(layoutId.invoke(),container,false)
 
-    open fun setUpToolBar(title: String) {
-        (requireActivity() as AppCompatActivity).apply{
+    open fun setUpToolBar(title: String?) {
+        (requireActivity() as AppCompatActivity)?.apply{
             supportActionBar?.apply {
                 Glide.with(requireContext())
                     .load(R.drawable.app)
