@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.synerzip.feeds.R
 import com.synerzip.feeds.base.BaseFragment
+import com.synerzip.feeds.comunication.DataRepository
 import com.synerzip.feeds.extentions.getColumnCountOnOrientation
 import com.synerzip.feeds.extentions.getDimen
 import com.synerzip.feeds.extentions.gone
@@ -19,6 +20,13 @@ class FeedsListFragment : BaseFragment() {
 
     override var layoutId: () -> Int = { R.layout.fragment_feeds_list }
 
+    companion object{
+        fun getInstance(dataRepository: DataRepository): FeedsListFragment{
+            return FeedsListFragment().apply {
+                this.dataRepository = dataRepository
+            }
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getFeedsUpdate()

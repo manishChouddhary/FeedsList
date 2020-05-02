@@ -1,9 +1,9 @@
 package com.synerzip.feeds.dependencyinjection
 
-import com.synerzip.feeds.base.BaseFragment
+import com.synerzip.feeds.FeedsActivity
 import dagger.Component
 
 @Component(modules = [FeedsModule::class])
 interface FeedsComponent {
-    fun inject(fragment: BaseFragment)
+    fun inject(activity: FeedsActivity)
 }

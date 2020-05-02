@@ -19,7 +19,6 @@ import javax.inject.Inject
 
 abstract class BaseFragment : Fragment() {
 
-    @Inject
     lateinit var dataRepository: DataRepository
 
     abstract var layoutId : ()->Int
@@ -28,7 +27,6 @@ abstract class BaseFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppApplication.diComponent.inject(this)
         viewModel = ViewModelProvider(
             requireActivity(),
             ViewModelProviderFactory(FeedsViewModel::class){

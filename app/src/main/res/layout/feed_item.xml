@@ -11,14 +11,14 @@
     </data>
 
     <androidx.cardview.widget.CardView
-        android:background="@color/text_color"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_5"
         app:cardCornerRadius="3dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:background="@color/text_color"
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
