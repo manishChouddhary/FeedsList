@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -14,14 +13,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.synerzip.feeds.AppApplication
 import com.synerzip.feeds.R
 import com.synerzip.feeds.comunication.DataRepository
-import com.synerzip.feeds.extentions.getMaxHeightLink
 import com.synerzip.feeds.ui.FeedsViewModel
 import com.synerzip.feeds.ui.ViewModelProviderFactory
 import javax.inject.Inject
 
 abstract class BaseFragment : Fragment() {
 
-    @Inject
     lateinit var dataRepository: DataRepository
 
     abstract var layoutId : ()->Int
@@ -30,7 +27,6 @@ abstract class BaseFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppApplication.diComponent.inject(this)
         viewModel = ViewModelProvider(
             requireActivity(),
             ViewModelProviderFactory(FeedsViewModel::class){
@@ -42,7 +38,7 @@ abstract class BaseFragment : Fragment() {
         = inflater.inflate(layoutId.invoke(),container,false)
 
     open fun setUpToolBar(title: String?) {
-        (requireActivity() as AppCompatActivity)?.apply{
+        (requireActivity() as AppCompatActivity).apply{
             supportActionBar?.apply {
                 Glide.with(requireContext())
                     .load(R.drawable.app)

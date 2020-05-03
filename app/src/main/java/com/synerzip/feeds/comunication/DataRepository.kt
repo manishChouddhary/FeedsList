@@ -1,6 +1,5 @@
 package com.synerzip.feeds.comunication
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.synerzip.feeds.database.FeedsDao
 import com.synerzip.feeds.exception.FeedsException
