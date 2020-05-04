@@ -11,35 +11,33 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
+private const val GENERIC_ERROR_MESSAGE = "Some error occurred"
+
 open class DataRepository(
     private val communicationService: CommunicationService,
     private val feedsDao: FeedsDao) {
 
-    companion object {
-        const val GENERIC_ERROR_MESSAGE = "Some error occurred"
-    }
+    val loadingStateLiveData by lazy { MutableLiveData<Boolean>() }
+    private val compositeDisposable: CompositeDisposable by lazy { CompositeDisposable() }
+    val errorOnFeedsResponse by lazy { MutableLiveData<FeedsException>() }
 
-    val loadingStateLiveData = MutableLiveData<Boolean>()
-    val feedsResponseLiveData = MutableLiveData<FeedsResponse>()
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
-    val errorOnFeedsResponse = MutableLiveData<FeedsException>()
+    var feedsEntityLiveData = MutableLiveData<List<ImEntity>>()
 
-    var feedsEntityLiveData=  MutableLiveData<List<ImEntity>>()
-
-    private fun insert(entity: ImEntity) {
-        feedsDao.insert(entity)
+    private fun insert(entity: List<ImEntity>) {
+        feedsDao.updateData(entity)
     }
 
     fun getFeeds(onLine: Boolean) {
         loadingStateLiveData.postValue(true)
-        if(!onLine) {
-            compositeDisposable.add(feedsDao.getFeedEntities().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    handleSuccessResponse(it)
-                }, {
-                    handleErrorResponse(it)
-                })
+        if (!onLine) {
+            compositeDisposable.add(
+                feedsDao.getFeedEntities().subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        handleSuccessResponse(it)
+                    }, {
+                        handleErrorResponse(it)
+                    })
             )
             return
         }
@@ -61,11 +59,10 @@ open class DataRepository(
 
     private fun handleSuccessResponse(feedsEntity: List<ImEntity>, deleteAll: Boolean = false) {
         loadingStateLiveData.postValue(false)
-        if(deleteAll)
-        compositeDisposable.add(Completable.fromAction {
-            feedsDao.deleteAll()
-            feedsEntity.forEach { insert(it) }
-        }.subscribeOn(Schedulers.io()).subscribe({},{ handleErrorResponse(it)}))
+        if (deleteAll)
+            compositeDisposable.add(Completable.fromAction {
+                insert(feedsEntity)
+            }.subscribeOn(Schedulers.io()).subscribe({}, { handleErrorResponse(it) }))
         feedsEntityLiveData.value = feedsEntity
     }
 }

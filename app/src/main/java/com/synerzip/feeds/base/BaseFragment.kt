@@ -19,8 +19,6 @@ import javax.inject.Inject
 
 abstract class BaseFragment : Fragment() {
 
-    lateinit var dataRepository: DataRepository
-
     abstract var layoutId : ()->Int
 
     override fun onCreate(savedInstanceState: Bundle?) {

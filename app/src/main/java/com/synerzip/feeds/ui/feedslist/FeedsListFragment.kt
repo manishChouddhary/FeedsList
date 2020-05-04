@@ -3,12 +3,9 @@ package com.synerzip.feeds.ui.feedslist
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import com.synerzip.feeds.AppApplication
 import com.synerzip.feeds.R
 import com.synerzip.feeds.base.BaseFragment
-import com.synerzip.feeds.comunication.DataRepository
-import com.synerzip.feeds.extentions.*
 import com.synerzip.feeds.model.ImEntity
 import com.synerzip.feeds.ui.FeedsViewModel
 import kotlinx.android.synthetic.main.fragment_feeds_list.*
