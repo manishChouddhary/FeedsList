@@ -10,5 +10,5 @@ Using
 5. Mockk Unit test
 6. Espresso Instrumentation test
 
-![landscape](/Screenshot_20200504-202338.jpg =100x20)
-![portrait](/Screenshot_20200504-202349.jpg =100x20)
+<img src= "./Screenshot_20200504-202338.webp" width="200">
+<img src= "./Screenshot_20200504-202349.webp" width="200">
