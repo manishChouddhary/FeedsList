@@ -23,15 +23,8 @@ abstract class BaseFragment : Fragment() {
 
     abstract var layoutId : ()->Int
 
-    lateinit var viewModel: FeedsViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(
-            requireActivity(),
-            ViewModelProviderFactory(FeedsViewModel::class){
-                FeedsViewModel(dataRepository)
-            }).get(FeedsViewModel::class.java)
     }
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?

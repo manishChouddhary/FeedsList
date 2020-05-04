@@ -1,7 +1,7 @@
 package com.synerzip.feeds.dependencyinjection
 
-import android.app.Application
-import com.synerzip.feeds.AppApplication
+import android.content.Context
+import androidx.room.Room
 import com.synerzip.feeds.comunication.DataRepository
 import com.synerzip.feeds.database.FeedsDao
 import com.synerzip.feeds.database.FeedsDatabase
@@ -12,8 +12,8 @@ import dagger.Provides
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
-@Module
-class FeedsModule {
+@Module(includes = [FragmentBuilder::class])
+class FeedsModule(private val context : Context) {
     @Provides
     fun provideRetrofitClient(): Retrofit {
         return NetworkClient().getRetrofitClient()
@@ -25,14 +25,19 @@ class FeedsModule {
     }
 
     @Provides
-    fun provideApplication():Application = AppApplication.application
-
+    fun getFeedsDatabase(): FeedsDatabase {
+        return Room.databaseBuilder(
+            context,
+            FeedsDatabase::class.java,
+            "feed_database")
+            .build()
+    }
     @Provides
-    fun provideFeedsDao(application : Application) : FeedsDao{
-        return FeedsDatabase.getDatabase(application).feedsDao()
+    fun provideFeedsDao(feedsDatabase: FeedsDatabase) : FeedsDao{
+        return feedsDatabase.feedsDao()
     }
 
-    @Provides
+    @Provides @Singleton
     fun provideDataRepository(communicationService: CommunicationService, feedsDao: FeedsDao): DataRepository {
         return DataRepository(communicationService, feedsDao)
     }
