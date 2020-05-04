@@ -3,7 +3,6 @@ package com.synerzip.feeds.comunication
 import androidx.lifecycle.MutableLiveData
 import com.synerzip.feeds.database.FeedsDao
 import com.synerzip.feeds.exception.FeedsException
-import com.synerzip.feeds.model.FeedsResponse
 import com.synerzip.feeds.model.ImEntity
 import com.synerzip.feeds.network.CommunicationService
 import io.reactivex.Completable

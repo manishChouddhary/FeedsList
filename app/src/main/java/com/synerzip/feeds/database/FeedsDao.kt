@@ -20,9 +20,6 @@ interface FeedsDao {
         insertAll(entities)
     }
 
-    @Insert(onConflict =  IGNORE)
-    fun insert(entity : ImEntity)
-
     @Insert(onConflict =  REPLACE)
     fun insertAll(entity : List<ImEntity>)
 
