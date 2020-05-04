@@ -4,14 +4,20 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.synerzip.feeds.model.Attributes
-import com.synerzip.feeds.model.Common
-import com.synerzip.feeds.model.ImEntity
+import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.synerzip.feeds.model.*
 
-@Database(entities = [ImEntity::class, Attributes::class, Common::class], version = 1, exportSchema = false)
+@Database(entities = [ImEntity::class], version = 1, exportSchema = false)
+@TypeConverters(CommonTypeConverter::class)
 abstract class FeedsDatabase: RoomDatabase() {
     abstract fun feedsDao(): FeedsDao
 
+    private class FeedsDatabaseCallback() : RoomDatabase.Callback() {
+        override fun onOpen(db: SupportSQLiteDatabase) {
+            super.onOpen(db)
+        }
+    }
     companion object {
         // Singleton prevents multiple instances of database opening at the
         // same time.
@@ -28,7 +34,9 @@ abstract class FeedsDatabase: RoomDatabase() {
                     context.applicationContext,
                     FeedsDatabase::class.java,
                     "feed_database"
-                ).build()
+                )
+                    .addCallback(FeedsDatabaseCallback())
+                    .build()
                 INSTANCE = instance
                 return instance
             }

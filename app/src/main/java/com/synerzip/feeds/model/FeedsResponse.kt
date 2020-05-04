@@ -1,6 +1,8 @@
 package com.synerzip.feeds.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class FeedsResponse(val feed: Feed)
@@ -22,23 +24,22 @@ data class Author(
 
 @Entity(tableName = "entity_table")
 data class ImEntity(
-    @SerializedName("im:name") val name: Common,
-    @SerializedName("rights") val rights: Common,
-    @SerializedName("im:price") val price: Common,
-    @SerializedName("im:image") val image: List<Common>,
-    @SerializedName("im:artist") val artist: Common,
-    val title: Common,
-    val link: Common,
-    val id: Common,
-    @SerializedName("im:contentType") val contentType: Common,
-    val category: Common,
-    @SerializedName("im:releaseDate") val releaseDate: Common
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "im_id") val im_id : Int,
+    @SerializedName("im:name") @ColumnInfo(name = "name")val name: Common?,
+    @SerializedName("rights") @ColumnInfo(name = "right")val rights: Common?,
+    @SerializedName("im:price") @ColumnInfo(name = "price") val price: Common?,
+    @SerializedName("im:image") @ColumnInfo(name = "image")val image: List<Common>?,
+    @SerializedName("im:artist") @ColumnInfo(name = "artist")val artist: Common?,
+    @ColumnInfo(name = "title") val title: Common?,
+    @ColumnInfo(name = "link") val link: Common?,
+    @ColumnInfo(name = "id")val id: Common?,
+    @SerializedName("im:contentType") @ColumnInfo(name = "contentType") val contentType: Common?,
+    @ColumnInfo(name = "category") val category: Common?,
+    @SerializedName("im:releaseDate") @ColumnInfo(name = "releaseDate") val releaseDate: Common?
 )
 
-@Entity(tableName = "commons_table")
 data class Common(val label: String, val attributes: Attributes)
 
-@Entity(tableName = "attributes_table")
 data class Attributes(
     val amount: String,
     val currency: String,

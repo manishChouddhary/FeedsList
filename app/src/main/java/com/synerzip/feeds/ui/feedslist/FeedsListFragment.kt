@@ -7,11 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.synerzip.feeds.R
 import com.synerzip.feeds.base.BaseFragment
 import com.synerzip.feeds.comunication.DataRepository
-import com.synerzip.feeds.extentions.getColumnCountOnOrientation
-import com.synerzip.feeds.extentions.getDimen
-import com.synerzip.feeds.extentions.gone
-import com.synerzip.feeds.extentions.visible
-import com.synerzip.feeds.model.FeedsResponse
+import com.synerzip.feeds.extentions.*
 import com.synerzip.feeds.model.ImEntity
 import kotlinx.android.synthetic.main.fragment_feeds_list.*
 
@@ -30,12 +26,13 @@ class FeedsListFragment : BaseFragment() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getFeedsUpdate()
+        viewModel.getFeedsUpdate(requireContext().hasNetworkAvailable())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
+        setUpToolBar(getString(R.string.app_name))
         observeLoadingState()
         observeListState()
         observeErrorState()

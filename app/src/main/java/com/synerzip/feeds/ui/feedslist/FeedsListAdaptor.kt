@@ -35,7 +35,7 @@ class FeedsListAdaptor : RecyclerView.Adapter<FeedsListAdaptor.ViewHolder>() {
         fun bind(content: ImEntity) {
             cItemView.contentItem = content
             Glide.with(cItemView.root.context)
-                .load(content.image.getMaxHeightLink())
+                .load(content.image?.getMaxHeightLink())
                 .error(R.drawable.error_place_holder)
                 .placeholder(R.drawable.ic_placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)

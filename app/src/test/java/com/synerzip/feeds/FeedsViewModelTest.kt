@@ -37,7 +37,7 @@ class FeedsViewModelTest {
 
     @Test
     fun test_for_getFeeds() {
-        viewModel.getFeedsUpdate()
+        viewModel.getFeedsUpdate(true)
         assert(viewModel.feedsLiveData.value?.feed?.entry?.size == 1)
         assert(viewModel.feedsLiveData.value?.feed?.entry?.get(0) == MockDataProvider.getMockEntity())
         assert(viewModel.feedsLiveData.value?.feed?.author?.name?.label == MockDataProvider.title)

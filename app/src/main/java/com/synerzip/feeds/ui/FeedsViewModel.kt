@@ -14,7 +14,7 @@ class FeedsViewModel(private val repository: DataRepository): ViewModel() {
     val loadingStateLiveData :LiveData<Boolean> = repository.loadingStateLiveData
     val feedEntityLiveData : LiveData<List<ImEntity>> = repository.feedsEntityLiveData
 
-    fun getFeedsUpdate() {
-        repository.getFeeds()
+    fun getFeedsUpdate(isOnLine: Boolean) {
+        repository.getFeeds(isOnLine)
     }
 }

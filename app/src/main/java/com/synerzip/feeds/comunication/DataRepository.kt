@@ -6,34 +6,48 @@ import com.synerzip.feeds.exception.FeedsException
 import com.synerzip.feeds.model.FeedsResponse
 import com.synerzip.feeds.model.ImEntity
 import com.synerzip.feeds.network.CommunicationService
-import io.reactivex.Single
+import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-open class DataRepository(private val communicationService: CommunicationService, private val feedsDao: FeedsDao) {
+open class DataRepository(
+    private val communicationService: CommunicationService,
+    private val feedsDao: FeedsDao) {
 
-    companion object{
+    companion object {
         const val GENERIC_ERROR_MESSAGE = "Some error occurred"
     }
+
     val loadingStateLiveData = MutableLiveData<Boolean>()
     val feedsResponseLiveData = MutableLiveData<FeedsResponse>()
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
     val errorOnFeedsResponse = MutableLiveData<FeedsException>()
-    val feedsEntityLiveData : LiveData<List<ImEntity>> = feedsDao.getFeedEntities()
 
-    suspend fun insert(entity: ImEntity) {
+    var feedsEntityLiveData=  MutableLiveData<List<ImEntity>>()
+
+    private fun insert(entity: ImEntity) {
         feedsDao.insert(entity)
     }
 
-    fun getFeeds() {
+    fun getFeeds(onLine: Boolean) {
         loadingStateLiveData.postValue(true)
-       val disposable =  communicationService.getFeeds()
+        if(!onLine) {
+            compositeDisposable.add(feedsDao.getFeedEntities().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    handleSuccessResponse(it)
+                }, {
+                    handleErrorResponse(it)
+                })
+            )
+            return
+        }
+        val disposable = communicationService.getFeeds()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { }
             .subscribe({
-                handleSuccessResponse(it)
+                handleSuccessResponse(it.feed.entry, true)
             }, {
                 handleErrorResponse(it)
             })
@@ -45,14 +59,13 @@ open class DataRepository(private val communicationService: CommunicationService
         errorOnFeedsResponse.value = FeedsException(exception?.message ?: GENERIC_ERROR_MESSAGE)
     }
 
-    private fun handleSuccessResponse(feedsResponse: FeedsResponse?) {
+    private fun handleSuccessResponse(feedsEntity: List<ImEntity>, deleteAll: Boolean = false) {
         loadingStateLiveData.postValue(false)
-        feedsResponseLiveData.value = feedsResponse
-        /*suspend {
-            feedsResponse?.feed?.entry?.forEach { feedsDao.insert(it) }
-        }*/
-        (feedsEntityLiveData as MutableLiveData).value = feedsResponse?.feed?.entry
+        if(deleteAll)
+        compositeDisposable.add(Completable.fromAction {
+            feedsDao.deleteAll()
+            feedsEntity.forEach { insert(it) }
+        }.subscribeOn(Schedulers.io()).subscribe({},{ handleErrorResponse(it)}))
+        feedsEntityLiveData.value = feedsEntity
     }
-
-
 }

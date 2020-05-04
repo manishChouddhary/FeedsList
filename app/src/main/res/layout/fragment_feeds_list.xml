@@ -27,7 +27,6 @@
         android:layout_height="match_parent"
         android:visibility="gone"
         android:background="@color/text_color"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
