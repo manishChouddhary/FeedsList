@@ -1,2 +1,2 @@
-rootProject.name='Feeds'
+rootProject.name='FeedAssignment'
 include ':app'

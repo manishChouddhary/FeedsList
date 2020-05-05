@@ -7,31 +7,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.synerzip.feeds.AppApplication
 import com.synerzip.feeds.R
-import com.synerzip.feeds.comunication.DataRepository
-import com.synerzip.feeds.ui.FeedsViewModel
-import com.synerzip.feeds.ui.ViewModelProviderFactory
-import javax.inject.Inject
 
 abstract class BaseFragment : Fragment() {
 
-    lateinit var dataRepository: DataRepository
-
     abstract var layoutId : ()->Int
-
-    lateinit var viewModel: FeedsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(
-            requireActivity(),
-            ViewModelProviderFactory(FeedsViewModel::class){
-                FeedsViewModel(dataRepository)
-            }).get(FeedsViewModel::class.java)
     }
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?

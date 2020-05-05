@@ -4,37 +4,40 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import com.synerzip.feeds.AppApplication
 import com.synerzip.feeds.R
 import com.synerzip.feeds.base.BaseFragment
-import com.synerzip.feeds.comunication.DataRepository
-import com.synerzip.feeds.extentions.getColumnCountOnOrientation
-import com.synerzip.feeds.extentions.getDimen
-import com.synerzip.feeds.extentions.gone
-import com.synerzip.feeds.extentions.visible
-import com.synerzip.feeds.model.FeedsResponse
+import com.synerzip.feeds.extentions.*
+import com.synerzip.feeds.model.ImEntity
+import com.synerzip.feeds.ui.FeedsViewModel
 import kotlinx.android.synthetic.main.fragment_feeds_list.*
+import javax.inject.Inject
 
 class FeedsListFragment : BaseFragment() {
+
+    @Inject
+    lateinit var viewModel: FeedsViewModel
 
     private lateinit var rvAdapter: FeedsListAdaptor
 
     override var layoutId: () -> Int = { R.layout.fragment_feeds_list }
 
     companion object{
-        fun getInstance(dataRepository: DataRepository): FeedsListFragment{
-            return FeedsListFragment().apply {
-                this.dataRepository = dataRepository
-            }
+        fun getInstance(): FeedsListFragment{
+            return FeedsListFragment()
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getFeedsUpdate()
+        AppApplication.application.androidInjector().inject(this)
+        viewModel.getFeedsUpdate(requireContext().hasNetworkAvailable())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
+        setUpToolBar(getString(R.string.app_name))
         observeLoadingState()
         observeListState()
         observeErrorState()
@@ -71,12 +74,9 @@ class FeedsListFragment : BaseFragment() {
     }
 
     private fun observeListState() {
-        viewModel.feedsLiveData.observe(viewLifecycleOwner, Observer<FeedsResponse> {
-            with(it.feed){
-                rvFeedsList?.visible()
-                rvAdapter.setList(entry)
-                setUpToolBar(author.name.label)
-            }
+        viewModel.feedEntityLiveData.observe(viewLifecycleOwner, Observer<List<ImEntity>> {
+            rvAdapter.setList(it)
+            rvFeedsList?.visible()
         })
     }
 

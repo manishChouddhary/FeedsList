@@ -11,15 +11,11 @@ import javax.inject.Inject
 
 class FeedsActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var dataRepository: DataRepository
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        AppApplication.diComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feeds)
         setUpToolbar()
-        replace(FeedsListFragment.getInstance(dataRepository),R.id.container,false,FeedsListFragment::class.java.canonicalName)
+        replace(FeedsListFragment.getInstance(),R.id.container,false,FeedsListFragment::class.java.canonicalName)
     }
 
     private fun setUpToolbar() {

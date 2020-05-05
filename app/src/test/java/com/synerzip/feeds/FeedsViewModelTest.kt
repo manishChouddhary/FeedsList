@@ -2,6 +2,7 @@ package com.synerzip.feeds
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.synerzip.feeds.comunication.DataRepository
+import com.synerzip.feeds.database.FeedsDao
 import com.synerzip.feeds.network.CommunicationService
 import com.synerzip.feeds.ui.FeedsViewModel
 import io.mockk.MockKAnnotations
@@ -26,21 +27,23 @@ class FeedsViewModelTest {
     @MockK
     lateinit var communicationService: CommunicationService
 
+    @MockK
+    lateinit var feedsDao: FeedsDao
+
     @Before
     fun setup() {
         MockKAnnotations.init(this)
         RxUnitTestTool.asyncToSync()
-        dataRepository = DataRepository(communicationService)
+        dataRepository = DataRepository(communicationService, feedsDao)
         viewModel = FeedsViewModel(dataRepository)
         setupMocks()
     }
 
     @Test
     fun test_for_getFeeds() {
-        viewModel.getFeedsUpdate()
-        assert(viewModel.feedsLiveData.value?.feed?.entry?.size == 1)
-        assert(viewModel.feedsLiveData.value?.feed?.entry?.get(0) == MockDataProvider.getMockEntity())
-        assert(viewModel.feedsLiveData.value?.feed?.author?.name?.label == MockDataProvider.title)
+        viewModel.getFeedsUpdate(true)
+        assert(viewModel.feedEntityLiveData.value?.size == 1)
+        assert(viewModel.feedEntityLiveData.value?.get(0) == MockDataProvider.getMockEntity())
     }
 
     private fun setupMocks() {
